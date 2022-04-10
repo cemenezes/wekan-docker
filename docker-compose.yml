@@ -1,0 +1,72 @@
+version: '2'
+services:
+
+  wekandb:
+    image: mongo:4.4
+    container_name: wekan-db
+    restart: always
+    command: mongod --logpath /dev/null --oplogSize 128 --quiet
+    networks:
+      - wekan-tier
+    expose:
+      - 27017
+    volumes:
+      - wekan-db:/data/db
+      - wekan-db-dump:/dump
+
+  wekan:
+    image: quay.io/wekan/wekan
+    container_name: wekan-app
+    restart: always
+    networks:
+      - wekan-tier
+    ports:
+      - 80:8080
+    environment:
+      - MONGO_URL=mongodb://wekandb:27017/wekan
+      - ROOT_URL=http://10.1.4.130/wekan  #   <=== using only at same laptop/desktop where Wekan is installed
+      - WITH_API=true
+      - RICHER_CARD_COMMENT_EDITOR=false
+      - CARD_OPENED_WEBHOOK_ENABLED=false
+      - BIGEVENTS_PATTERN=NONE
+      - BROWSER_POLICY_ENABLED=true
+      - DEFAULT_AUTHENTICATION_METHOD=ldap
+      - LDAP_ENABLE=true
+      - LDAP_PORT=389
+      - LDAP_HOST=10.1.2.119
+      - LDAP_BASEDN=ou=usuarios,dc=ac,dc=gov,dc=br
+      - LDAP_LOGIN_FALLBACK=false
+      - LDAP_RECONNECT=true
+      - LDAP_TIMEOUT=10000
+      - LDAP_IDLE_TIMEOUT=10000
+      - LDAP_CONNECT_TIMEOUT=10000
+      - LDAP_AUTHENTIFICATION=true
+      - LDAP_AUTHENTIFICATION_USERDN=cn=Manager,dc=ac,dc=gov,dc=br
+      - LDAP_AUTHENTIFICATION_PASSWORD=114@gstsrv
+      - LDAP_LOG_ENABLED=true
+      - LDAP_BACKGROUND_SYNC=false
+      - LDAP_BACKGROUND_SYNC_INTERVAL='every 1 hour'
+      - LDAP_BACKGROUND_SYNC_KEEP_EXISTANT_USERS_UPDATED=false
+      - LDAP_BACKGROUND_SYNC_IMPORT_NEW_USERS=true
+      - LDAP_ENCRYPTION=false
+      - LDAP_USER_AUTHENTICATION_FIELD="uid"
+      - LDAP_USER_SEARCH_FIELD=uid
+      - LDAP_UNIQUE_IDENTIFIER_FIELD=guid
+      - LDAP_USERNAME_FIELD=uid
+      - LDAP_FULLNAME_FIELD=cn
+      - LDAP_SYNC_USER_DATA=false
+      - LDAP_SYNC_USER_DATA_FIELDMAP={"cn":"name", "mail":"email"}
+    depends_on:
+      - wekandb
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+volumes:
+  wekan-db:
+    driver: local
+  wekan-db-dump:
+    driver: local
+
+networks:
+  wekan-tier:
+    driver: bridge
+
