@@ -33,16 +33,16 @@ services:
       - DEFAULT_AUTHENTICATION_METHOD=ldap
       - LDAP_ENABLE=true
       - LDAP_PORT=389
-      - LDAP_HOST=10.1.2.119
-      - LDAP_BASEDN=ou=usuarios,dc=ac,dc=gov,dc=br
+      - LDAP_HOST=HOST
+      - LDAP_BASEDN=ou=usuarios,dc=a,dc=b,dc=c
       - LDAP_LOGIN_FALLBACK=false
       - LDAP_RECONNECT=true
       - LDAP_TIMEOUT=10000
       - LDAP_IDLE_TIMEOUT=10000
       - LDAP_CONNECT_TIMEOUT=10000
       - LDAP_AUTHENTIFICATION=true
-      - LDAP_AUTHENTIFICATION_USERDN=cn=Manager,dc=ac,dc=gov,dc=br
-      - LDAP_AUTHENTIFICATION_PASSWORD=114@gstsrv
+      - LDAP_AUTHENTIFICATION_USERDN=cn=root
+      - LDAP_AUTHENTIFICATION_PASSWORD=password
       - LDAP_LOG_ENABLED=true
       - LDAP_BACKGROUND_SYNC=false
       - LDAP_BACKGROUND_SYNC_INTERVAL='every 1 hour'
@@ -69,4 +69,3 @@ volumes:
 networks:
   wekan-tier:
     driver: bridge
-
