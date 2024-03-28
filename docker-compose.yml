@@ -24,7 +24,7 @@ services:
       - 80:8080
     environment:
       - MONGO_URL=mongodb://wekandb:27017/wekan
-      - ROOT_URL=http://10.1.4.130/wekan  #   <=== using only at same laptop/desktop where Wekan is installed
+      - ROOT_URL=http://$HOST/wekan  #   <=== using only at same laptop/desktop where Wekan is installed
       - WITH_API=true
       - RICHER_CARD_COMMENT_EDITOR=false
       - CARD_OPENED_WEBHOOK_ENABLED=false
@@ -34,7 +34,7 @@ services:
       - LDAP_ENABLE=true
       - LDAP_PORT=389
       - LDAP_HOST=HOST
-      - LDAP_BASEDN=ou=usuarios,dc=a,dc=b,dc=c
+      - LDAP_BASEDN=ou=usuarios,dc=x,dc=y,dc=z
       - LDAP_LOGIN_FALLBACK=false
       - LDAP_RECONNECT=true
       - LDAP_TIMEOUT=10000
